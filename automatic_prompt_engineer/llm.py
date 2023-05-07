@@ -148,12 +148,34 @@ class GPT_Forward(LLM):
     def __generate_text(self, prompt, n):
         """Generates text from the model."""
         if not isinstance(prompt, list):
-            text = [prompt]
+            prompt = [prompt]
         config = self.config['gpt_config'].copy()
         config['n'] = n
         # If there are any [APE] tokens in the prompts, remove them
         for i in range(len(prompt)):
             prompt[i] = prompt[i].replace('[APE]', '').strip()
+
+        if config["model"] == 'gpt-3.5-turbo':
+            # use the chatgpt
+            # transform the prompt into messages
+            messages = []
+            for i in range(len(prompt)):
+                mes_dic = {"role":"user", "content":prompt[i]}
+                messages.append(mes_dic)
+
+            response = None
+            while response is None:
+                try:
+                    response = openai.ChatCompletion.create(
+                        **config, messages=messages)
+                except Exception as e:
+                    if 'is greater than the maximum' in str(e):
+                        raise BatchSizeException()
+                    print(e)
+                    print('Retrying...')
+                    time.sleep(5)
+            return [response.choices[i].message['content'] for i in range(len(response.choices))]
+        
         response = None
         while response is None:
             try:
