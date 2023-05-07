@@ -1,3 +1,5 @@
+**The code has been updated to utilize the latest ChatGPT model using OpenAI's newest API, ChatCompletion. With this modification, you will be able to generate prompts using ChatGPT. However, please be aware that due to restrictions with ChatCompletion, ChatGPT cannot currently be used for evaluating, and the cost confirm feature for calling ChatCompletion is not yet supported.**
+
 # Large Language Models Are Human-Level Prompt Engineers
 
 Yongchao Zhou*, Andrei Ioan Muresanu*, Ziwen Han\*, Keiran Paster, Silviu Pitis, Harris Chan, Jimmy Ba
